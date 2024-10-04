@@ -10,4 +10,15 @@ describe 'Day 1: Trebuchet?!' do
       expect(values('treb7uchet')).to eq(77)
     end
   end
+
+  describe 'Sum of Calibration Values' do
+    it 'sums all the calibration values' do
+      cal_vals = '1abc2
+      pqr3stu8vwx
+      a1b2c3d4e5f
+      treb7uchet'
+
+      expect(sum(cal_vals)).to eq(142)
+    end
+  end
 end
