@@ -43,10 +43,7 @@ def values(str)
 end
 
 def sum(str)
-  value_arr = str.split
-  sum = 0
-  value_arr.each { |e| sum += values(e) }
-  sum
+  str.split.map { |e| values(e) }.sum
 end
 
 file_path = File.expand_path("day1_input.txt", __dir__)
