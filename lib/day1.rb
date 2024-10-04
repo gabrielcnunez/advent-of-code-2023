@@ -46,6 +46,63 @@ def sum(str)
   str.split.map { |e| values(e) }.sum
 end
 
+def real_values(str)
+  number_words = {
+  "one" => "1",
+  "two" => "2",
+  "three" => "3",
+  "four" => "4",
+  "five" => "5",
+  "six" => "6",
+  "seven" => "7",
+  "eight" => "8",
+  "nine" => "9"
+  }
+
+  values = ''
+  str_builder = ''
+  chars_array = str.chars
+
+  catch(:done) do
+    chars_array.each do |char|
+      values << char and throw(:done) if char.match?(/[0-9]/)
+      str_builder << char
+      next if str_builder.size < 3
+      
+      number_words.each do |word, num|
+        if str_builder.include?(word)
+          values << num
+          str_builder = ''
+          throw(:done) 
+        end
+      end
+    end
+  end
+
+  catch(:done) do
+    chars_array.reverse_each do |char|
+      values << char and throw(:done) if char.match?(/[0-9]/)
+      str_builder.prepend(char)
+      next if str_builder.size < 3
+      
+      number_words.each do |word, num|
+        if str_builder.include?(word)
+          values << num
+          throw(:done) 
+        end
+      end
+    end
+  end
+
+  values.to_i
+end
+
+def real_sum(str)
+  str.split.map { |e| real_values(e) }.sum
+end
+
 file_path = File.expand_path("day1_input.txt", __dir__)
 input = File.read(file_path)
+
 puts sum(input)
+puts real_sum(input)
