@@ -75,3 +75,8 @@ def ids_sum(str)
     sum + (possible?(e) ? e[/Game (\d+):/, 1].to_i : 0)
   end
 end
+
+file_path = File.expand_path("day2_input.txt", __dir__)
+input = File.read(file_path)
+
+puts ids_sum(input)
