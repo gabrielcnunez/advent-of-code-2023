@@ -48,6 +48,22 @@
 # red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
 
 def possible?(str)
+  red_shows, green_shows, blue_shows = rgb_values(str)
+
+  return false if red_shows.any? { |show| show > 12 }
+  return false if green_shows.any? { |show| show > 13 }
+  return false if blue_shows.any? { |show| show > 14 }
+
+  true
+end
+
+def ids_sum(str)
+  str.split("\n").reduce(0) do |sum, e| 
+    sum + (possible?(e) ? e[/Game (\d+):/, 1].to_i : 0)
+  end
+end
+
+def rgb_values(str)
   all_shows = str.partition(':').last.split(/[;,]/)
   red_shows = []
   green_shows = []
@@ -63,20 +79,10 @@ def possible?(str)
     end
   end
 
-  return false if red_shows.any? { |show| show > 12 }
-  return false if green_shows.any? { |show| show > 13 }
-  return false if blue_shows.any? { |show| show > 14 }
-
-  true
-end
-
-def ids_sum(str)
-  str.split("\n").reduce(0) do |sum, e| 
-    sum + (possible?(e) ? e[/Game (\d+):/, 1].to_i : 0)
-  end
+  [red_shows, green_shows, blue_shows]
 end
 
 file_path = File.expand_path("day2_input.txt", __dir__)
 input = File.read(file_path)
 
-puts ids_sum(input)
+# puts ids_sum(input)
