@@ -69,7 +69,7 @@ def fewest_cubes(str)
   [red_shows.max, green_shows.max, blue_shows.max]
 end
 
-def sum_power_of_set(str)
+def sum_power_of_sets(str)
   str.split("\n").reduce(0) do |sum, e| 
     sum + fewest_cubes(e).reduce(:*)
   end
@@ -97,4 +97,5 @@ end
 file_path = File.expand_path("day2_input.txt", __dir__)
 input = File.read(file_path)
 
-# puts ids_sum(input)
+puts ids_sum(input)
+puts sum_power_of_sets(input)
