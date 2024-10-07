@@ -63,6 +63,18 @@ def ids_sum(str)
   end
 end
 
+def fewest_cubes(str)
+  red_shows, green_shows, blue_shows = rgb_values(str)
+
+  [red_shows.max, green_shows.max, blue_shows.max]
+end
+
+def sum_power_of_set(str)
+  str.split("\n").reduce(0) do |sum, e| 
+    sum + fewest_cubes(e).reduce(:*)
+  end
+end
+
 def rgb_values(str)
   all_shows = str.partition(':').last.split(/[;,]/)
   red_shows = []
