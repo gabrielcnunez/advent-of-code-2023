@@ -74,7 +74,7 @@ def part_numbers_sum(str)
         if !num_builder.empty?
           adjacent_chars = ''
           part_size = num_builder.size
-          
+
           adjacent_chars << rows[i][j - (part_size + 1)] if j - (part_size + 1) >= 0
           if i - 1 >= 0
             adjacent_chars << rows[i - 1][j - part_size, part_size + 1]
@@ -110,3 +110,8 @@ def part_numbers_sum(str)
 
   sum
 end
+
+file_path = File.expand_path("day3_input.txt", __dir__)
+input = File.read(file_path)
+
+puts part_numbers_sum(input)
