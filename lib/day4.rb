@@ -63,3 +63,8 @@ def winning_cards_sum(str)
     wins > 0 ? 2 ** (wins - 1) : 0
   end.sum
 end
+
+file_path = File.expand_path("day4_input.txt", __dir__)
+input = File.read(file_path)
+
+puts winning_cards_sum(input)
