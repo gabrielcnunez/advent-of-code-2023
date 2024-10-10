@@ -67,6 +67,40 @@ def part_numbers_sum(str)
   sum
 end
 
+def gear_ratios_sum(str)
+  rows = str.split
+  sum = 0
+  gear_ratios = []
+
+  rows.each_with_index do |row, i|
+    row.chars.each_with_index do |char, j|
+      if char == '*'
+        if rows[i - 1][j].match?(/[0-9]/)
+          gear_ratios << rows[i - 1][j - 2, 5].split('.').max.to_i
+        else
+          gear_ratios << rows[i - 1][j - 3, 3].gsub('.', '').to_i if rows[i - 1][j - 1].match?(/[0-9]/)
+          gear_ratios << rows[i - 1][j + 1, 3].gsub('.', '').to_i if rows[i - 1][j + 1].match?(/[0-9]/)
+        end
+
+        gear_ratios << rows[i][j - 3, 3].gsub('.', '').to_i if rows[i][j - 1].match?(/[0-9]/)
+        gear_ratios << rows[i][j + 1, 3].gsub('.', '').to_i if rows[i][j + 1].match?(/[0-9]/)
+
+        if rows[i + 1][j].match?(/[0-9]/)
+          gear_ratios << rows[i + 1][j - 2, 5].split('.').max.to_i
+        else
+          gear_ratios << rows[i + 1][j - 3, 3].gsub('.', '').to_i if rows[i + 1][j - 1].match?(/[0-9]/)
+          gear_ratios << rows[i + 1][j + 1, 3].gsub('.', '').to_i if rows[i + 1][j + 1].match?(/[0-9]/)
+        end
+
+        sum += gear_ratios.reduce(:*) if gear_ratios.size == 2
+        gear_ratios = []
+      end
+    end
+  end
+
+  sum
+end
+
 def check_and_sum(num_builder, rows, i, j)
   part_size = num_builder.size
   adj_chars = ''
@@ -94,4 +128,4 @@ end
 file_path = File.expand_path("day3_input.txt", __dir__)
 input = File.read(file_path)
 
-puts part_numbers_sum(input)
+# puts part_numbers_sum(input)
