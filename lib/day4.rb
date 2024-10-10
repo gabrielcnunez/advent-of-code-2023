@@ -82,3 +82,4 @@ file_path = File.expand_path("day4_input.txt", __dir__)
 input = File.read(file_path)
 
 puts winning_cards_sum(input)
+puts scratchcards_total(input)
