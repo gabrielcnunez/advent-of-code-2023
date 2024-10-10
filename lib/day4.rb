@@ -55,5 +55,11 @@
 # Take a seat in the large pile of colorful cards. How many points are they worth in total?
 
 def winning_cards_sum(str)
-  
+  cards = str.split("\n")
+
+  cards.map do |card|
+    winners, numbers = card.partition(':').last.split('|')
+    wins = (winners.split & numbers.split).size
+    wins > 0 ? 2 ** (wins - 1) : 0
+  end.sum
 end
