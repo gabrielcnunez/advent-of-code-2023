@@ -1,3 +1,5 @@
+require 'set'
+
 # --- Day 3: Gear Ratios ---
 # You and the Elf eventually reach a gondola lift station; he says the gondola 
 # lift will take you up to the water source, but this is as far as he can 
@@ -70,36 +72,44 @@ end
 def gear_ratios_sum(str)
   rows = str.split
   sum = 0
-  gear_ratios = []
+  syms = []
 
   rows.each_with_index do |row, i|
     row.chars.each_with_index do |char, j|
-      if char == '*'
-        if rows[i - 1][j].match?(/[0-9]/)
-          gear_ratios << rows[i - 1][j - 2, 5].split('.').max.to_i
-        else
-          gear_ratios << rows[i - 1][j - 3, 3].gsub('.', '').to_i if rows[i - 1][j - 1].match?(/[0-9]/)
-          gear_ratios << rows[i - 1][j + 1, 3].gsub('.', '').to_i if rows[i - 1][j + 1].match?(/[0-9]/)
+      syms << [i, j] if char == '*'
+    end
+  end
+
+  syms.each do |(x, y)|
+    number_starts = Set.new
+  
+    [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1], [0, 1],
+      [1, -1], [1, 0], [1, 1],
+    ].each do |(dx, dy)|
+      nx = x + dx
+      ny = y + dy
+      if rows[nx][ny] =~ /\d/
+        nny = ny
+        while rows[nx][nny - 1] =~ /\d/
+          nny -= 1
         end
-
-        gear_ratios << rows[i][j - 3, 3].gsub('.', '').to_i if rows[i][j - 1].match?(/[0-9]/)
-        gear_ratios << rows[i][j + 1, 3].gsub('.', '').to_i if rows[i][j + 1].match?(/[0-9]/)
-
-        if rows[i + 1][j].match?(/[0-9]/)
-          gear_ratios << rows[i + 1][j - 2, 5].split('.').max.to_i
-        else
-          gear_ratios << rows[i + 1][j - 3, 3].gsub('.', '').to_i if rows[i + 1][j - 1].match?(/[0-9]/)
-          gear_ratios << rows[i + 1][j + 1, 3].gsub('.', '').to_i if rows[i + 1][j + 1].match?(/[0-9]/)
-        end
-
-        sum += gear_ratios.reduce(:*) if gear_ratios.size == 2
-        gear_ratios = []
+        number_starts << [nx, nny]
       end
+    end
+  
+    if number_starts.length == 2
+      result = number_starts.map do |(x, y)|
+        rows[x][y..].to_i
+      end.inject(:*)
+      sum += result
     end
   end
 
   sum
 end
+
 
 def check_and_sum(num_builder, rows, i, j)
   part_size = num_builder.size
@@ -129,3 +139,4 @@ file_path = File.expand_path("day3_input.txt", __dir__)
 input = File.read(file_path)
 
 # puts part_numbers_sum(input)
+puts gear_ratios_sum(input)
