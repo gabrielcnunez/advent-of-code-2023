@@ -64,8 +64,18 @@ def winning_cards_sum(str)
   end.sum
 end
 
-def total_scratchcards(str)
-  
+def scratchcards_total(str)
+  cards = str.split("\n")
+  total_cards = (0..cards.size - 1).each_with_object({}) { |k, h| h[k] = 1 }
+
+  cards.each_with_index do |card, i|
+    winners, numbers = card.partition(':').last.split('|')
+    wins = (winners.split & numbers.split).size
+
+    (1..wins).each { |e| total_cards[i + e] += 1 * total_cards[i] }
+  end
+
+  total_cards.values.sum
 end
 
 file_path = File.expand_path("day4_input.txt", __dir__)
