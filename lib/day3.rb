@@ -51,64 +51,44 @@ def part_numbers_sum(str)
       if char.match?(/[0-9]/)
         num_builder << char
         if j == row.size - 1
-          adjacent_chars = ''
-          part_size = num_builder.size
-
-          adjacent_chars << rows[i][j - part_size]
-          if i - 1 >= 0
-            adjacent_chars << rows[i - 1][j - part_size, part_size + 1]
-          end
-          if i < rows.size - 1
-            adjacent_chars << rows[i + 1][j - part_size, part_size + 1]
-          end
-          if adjacent_chars.match?(/[^a-zA-Z0-9.]/)
-            sum += num_builder.to_i
-            num_builder = ''
-          else
-            num_builder = ''
-          end
-        else
-          next
+          sum += endline_check_and_sum(num_builder, rows, i, j)
+          num_builder = ''
         end
       elsif char == '.'
-        if !num_builder.empty?
-          adjacent_chars = ''
-          part_size = num_builder.size
-
-          adjacent_chars << rows[i][j - (part_size + 1)] if j - (part_size + 1) >= 0
-          if i - 1 >= 0
-            adjacent_chars << rows[i - 1][j - part_size, part_size + 1]
-            if j - (part_size + 1) >= 0
-              adjacent_chars << rows[i - 1][j - (part_size + 1)]
-            end
-          end
-          if i < rows.size - 1
-            adjacent_chars << rows[i + 1][j - part_size, part_size + 1]
-            if j - (part_size + 1) >= 0
-              adjacent_chars << rows[i + 1][j - (part_size + 1)]
-            end
-          end
-          if adjacent_chars.match?(/[^a-zA-Z0-9.]/)
-            sum += num_builder.to_i
-            num_builder = ''
-          else
-            num_builder = ''
-          end
-        else
-          next
-        end
+        sum += check_and_sum(num_builder, rows, i, j) unless num_builder.empty?
+        num_builder = ''
       else
-        if !num_builder.empty?
-          sum += num_builder.to_i
-          num_builder = ''
-        else
-          next
-        end
+        sum += num_builder.to_i unless num_builder.empty?
+        num_builder = ''
       end
     end
   end
 
   sum
+end
+
+def check_and_sum(num_builder, rows, i, j)
+  part_size = num_builder.size
+  adj_chars = ''
+  
+  adj_chars << rows[i][j - (part_size + 1)] if j - (part_size + 1) >= 0 # left side
+  adj_chars << rows[i - 1][j - part_size - 1] if i - 1 >= 0 && j - (part_size - 1) >= 0 # above left
+  adj_chars << rows[i - 1][j - part_size, part_size + 1] if i - 1 >= 0 # above & above right
+  adj_chars << rows[i + 1][j - (part_size + 1)] if i < rows.size - 1 && j - (part_size + 1) >= 0 # below left
+  adj_chars << rows[i + 1][j - part_size, part_size + 1] if i < rows.size - 1 # below & below right
+
+  adj_chars.match?(/[^a-zA-Z0-9.]/) ? num_builder.to_i : 0
+end
+
+def endline_check_and_sum(num_builder, rows, i, j)
+  part_size = num_builder.size
+  adj_chars = ''
+
+  adj_chars << rows[i][j - part_size] # left side
+  adj_chars << rows[i - 1][j - part_size, part_size + 1] if i - 1 >= 0 # above left & above
+  adj_chars << rows[i + 1][j - part_size, part_size + 1] if i < rows.size - 1 # below left & below
+
+  adj_chars.match?(/[^a-zA-Z0-9.]/) ? num_builder.to_i : 0
 end
 
 file_path = File.expand_path("day3_input.txt", __dir__)
