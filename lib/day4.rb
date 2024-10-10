@@ -64,6 +64,10 @@ def winning_cards_sum(str)
   end.sum
 end
 
+def total_scratchcards(str)
+  
+end
+
 file_path = File.expand_path("day4_input.txt", __dir__)
 input = File.read(file_path)
 
